@@ -1,0 +1,6 @@
+{
+    "cmake.sourceDirectory": "/home/crp/dora_project/dora-rs/dora-hardware/vendors/imu/100D4/razor_imu_9dof",
+    "files.associations": {
+        "vector": "cpp"
+    }
+}

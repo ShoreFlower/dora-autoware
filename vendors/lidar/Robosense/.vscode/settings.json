@@ -1,0 +1,16 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "memory": "cpp",
+        "*.tcc": "cpp",
+        "bitset": "cpp",
+        "iterator": "cpp",
+        "ostream": "cpp",
+        "numeric": "cpp",
+        "istream": "cpp",
+        "thread": "cpp",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp"
+    }
+}
