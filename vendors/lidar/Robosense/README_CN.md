@@ -1,8 +1,24 @@
 # dora平台robosense激光雷达驱动
-这个驱动是由一个刚毕业一个月、数学系的本科生写的，从学习dora、学习激光雷达到写完仅有5天工作时间，能跑就行。
 # 1 怎么用
 ## 1.1 按说明书指示安装激光雷达并连线
-## 1.2 设置雷达信息
+
+## 1.2 可能遇到的问题
+
+可能是dora版本问题，头文../../../apis/c/operator/operator_types.h中没有对Input和Output结构体的具体定义，可以参考以下修改：
+
+```
+typedef struct Input{
+Vec_uint8_t id;
+Vec_uint8_t data;
+} Input_t;
+
+typedef struct Output{
+Vec_uint8_t id;
+Vec_uint8_t data;
+} Output_t;
+```
+
+## 1.3设置雷达信息
 rs_drive_dora.cpp 的第162-166行，分别填写：
 ``` cpp
   param.input_type = InputType::ONLINE_LIDAR;  // 输入源，ONLINE_LIDAR是指输入源是某个雷达，其他的还可以选从文件输入，不过我没测试
@@ -11,15 +27,17 @@ rs_drive_dora.cpp 的第162-166行，分别填写：
   param.lidar_type = LidarType::RSHELIOS_16P;  // 雷达型号，具体可以选什么，自己去看LidarType 这个枚举类型
 ```
 如果需要修改其他信息，比如雷达转速之类，很抱歉你得自己写这个功能了，能力所限。
-## 1.3 编译为动态库
+## 1.4 编译为动态库
 我使用的是这样
 ``` bash
-clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I <当前路径>/rs_driver/src
-clang++ -shared build/rs_driver_dora.o -o build/librs_driver_dora.so
+cd ~/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense #请替换为自己的文件夹路径
+clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I /home/crp/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense/rs_driver/src/  #生成静态库
+clang++ -shared build/rs_driver_dora.o -o build/librs_driver_dora.so  #生成动态库
+clang++ rs_driver_dora.cpp -lm -lrt -ldl -pthread -lpcap -std=c++14 -L ../../target/release --output build/rs_driver_dora -I /home/crp/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense/rs_driver/src/ #生成可执行文件
 ```
-我也不知道为什么robosense激光雷达SDK偏偏就把include写成尖括号<>，如果编译器汇报找不到文件，试着调调``` -I``` 后面的东西
-dora API示例用的就是clang，所以我也用clang了
-## 1.4 放在dora dataflow里用
+如果编译器汇报找不到文件，请尝试在``` -I``` 后面加上相应路径，
+
+## 1.5 放在dora dataflow里用
 我的测试dataflow是这样的：
 ``` yml
 nodes:
@@ -40,12 +58,14 @@ nodes:
 # 2 输出格式
 dora目前版本的输出全部是字节流。
 关于输出的点的坐标，在RSHELIOS_16P激光雷达上测试的结果为：以商标面指向前、输出航插接口指向下时，**X轴正方向向前，Y轴正方向向左，Z轴正方向向上，单位为米，与用户手册上的说明不同！** 反射率为最大255的无符号整数。建议使用雷达前，先使用RSView（厂商编写的点云可视化工具）等工具确定坐标方向。
+
 ## 2.1 默认点云输出
 默认情况下输出的是一个编码为字节流的点云，点云包含雷达旋转一周（360°的帧）所回报的所有点。输出格式为：
 |4 byte 点云编号（unsigned int）|4 byte 无作用| 8 byte 时间戳（double）|一大堆点，每个16 byte|
 每个点的格式为：
 |4 byte x轴坐标（float）|4 byte y轴坐标（float）|4 byte z轴坐标（float）|1 byte 反射率（uint_8）|3 byte 无作用|
 或者说是
+
 ``` cpp
 struct PointXYZI
 {
@@ -59,6 +79,7 @@ struct PointXYZI
 # 2.2 以单个点的形式输出
 本驱动理论上可以每次输出一个点云帧（360°的帧）里的所有点，每个点不止有坐标和反射率，还有它自己出自哪一线、这个点的时间戳。之所以称其为“理论上”是因为这个功能我没有测试。
 如果要使用这个功能的话，在第29行
+
 ```cpp
 typedef PointXYZI PointT;  // 把 PointXYZI 改成 PointXYZIRT
 ```

@@ -5,18 +5,14 @@ extern "C" {
 
 // #include "../../../dora/apis/c/operator/operator_api.h"
 }
+/*
+cd ~/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense
+clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I /home/crp/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense/rs_driver/src/
+clang++ -shared build/rs_driver_dora.o -o build/librs_driver_dora.so
+clang++ rs_driver_dora.cpp -lm -lrt -ldl -pthread -lpcap -std=c++14 -L ../../target/release --output build/rs_driver_dora -I /home/crp/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense/rs_driver/src/
+*/
 
 
-//clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I /home/crp/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense/rs_driver/src/
-
-
-
-// clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I /home/crp/dora_project/dora-rs/dora/apis/c/operator/src
-
-
-// clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I ~/dora_project/dora-rs/dora/vendors/lidar/Robosens/rs_driver/src
-
-// clang++ -c rs_driver_dora.cpp -o build/rs_driver_dora.o -fdeclspec -fPIC -I ~/dora_project/dora-rs/dora-hardware/vendors/lidar/Robosense/rs_driver/src
 #include <memory>
 #include <iostream>
 #include <vector>
@@ -211,7 +207,7 @@ extern "C" DoraResult_t dora_drop_operator(void* operator_context)
 }
 
 extern "C" OnEventResult_t dora_on_event(  
-    const RawEvent_t* event,  
+    RawEvent_t* event,  
     const SendOutput_t*
         send_output,  
 
