@@ -4,7 +4,7 @@
 
 ## 1.2 可能遇到的问题
 
-可能是dora版本问题，头文../../../apis/c/operator/operator_types.h中没有对Input和Output结构体的具体定义，可以参考以下修改：
+1.可能是dora版本问题，头文../../../apis/c/operator/operator_types.h中没有对Input和Output结构体的具体定义，可以参考以下修改：
 
 ```
 typedef struct Input{
@@ -18,7 +18,22 @@ Vec_uint8_t data;
 } Output_t;
 ```
 
+2.找不到头文件"../../../dora/apis/c/operator/operator_api.h"
+
+可以在代码rs_drive_dora.cpp 里修改为自己文件的绝对路径，以下是参考路径。
+
+```
+#include "/home/crp/dora_project/dora-rs/dora/apis/c/operator/operator_api.h"
+```
+
+或者编译的时候在clang++后面添加以下内容，以下是参考路径，具体以自己文件夹路径为准。
+
+```
+-I /home/crp/dora_project/dora-rs/dora-hardware/vendors/lidar/
+```
+
 ## 1.3设置雷达信息
+
 rs_drive_dora.cpp 的第162-166行，分别填写：
 ``` cpp
   param.input_type = InputType::ONLINE_LIDAR;  // 输入源，ONLINE_LIDAR是指输入源是某个雷达，其他的还可以选从文件输入，不过我没测试
