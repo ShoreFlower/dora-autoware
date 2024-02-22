@@ -1,7 +1,7 @@
 nodes:
-  - id: op_1
+  - id: test
     operator:
-      python: op_1/op_1.py
+      python: op_2/op_3.py
       inputs:
         tick: dora/timer/millis/100
       outputs:

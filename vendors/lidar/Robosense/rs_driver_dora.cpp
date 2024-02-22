@@ -214,7 +214,8 @@ extern "C" OnEventResult_t dora_on_event(
     void* operator_context)
 {
   Operator* op = (Operator*)operator_context;
-  if (event->input != NULL)
+  // if (event->input != NULL)
+  if (1)
   {
     // input event
 
@@ -239,6 +240,9 @@ extern "C" OnEventResult_t dora_on_event(
     DoraResult_t send_result = (send_output->send_output.call)(
         send_output->send_output.env_ptr,
         output);  
+    const char* a = "a";
+    const uint8_t* b ;
+    DoraResult_t send_result = dora_send_operator_output(send_output,a,b,1);
 
     OnEventResult_t result = { .result = send_result, .status = DORA_STATUS_CONTINUE };
 
@@ -257,7 +261,7 @@ extern "C" OnEventResult_t dora_on_event(
 int main(){
   RawEvent_t mainEvent;
   mainEvent.stop=false;
-  mainEvent.input->id.len=0;
+  // mainEvent.input->id.len=0;
   SendOutput_t *out;
   DoraInitResult_t r=dora_init_operator();
   OnEventResult_t result;
