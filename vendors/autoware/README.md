@@ -6,25 +6,21 @@
 
 将IMU驱动与GNSS驱动放入一个数据流当中，目前IMU可以直接发到ros2进行显示，但GNSS可能是室内定位的原因，定位数据都是无效定位。
 
-## 安装
-
-通过此文件的 requirements.txt 文件实现环境依赖项的安装：
-
-```
-pip install -r requirements.txt
-```
-
 ## 用法
 
 ```
 PATH=$PATH:$(pwd)
-cd /home/crp/dora_project/dora-rs/dora-hardware/vendors/gnss_imu/
+cd /home/crp/dora_project/dora-rs/dora-hardware/vendors/autoware/
 dora up
 sudo chmod 777 /dev/ttyUSB0 
 sudo chmod 777 /dev/ttyUSB1
 dora start dataflowImuGnss.yml --name test
 ```
 目前IMU对应/dev/ttyUSB0，GNSS对应/dev/ttyUSB1；
+
+Imu驱动代码：imu.py
+
+Gnss驱动代码：gnss_D300_driver_dora.py;
 
 先插的传感器是/dev/ttyUSB0 ，后插的传感器是/dev/ttyUSB1。
 

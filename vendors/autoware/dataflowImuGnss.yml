@@ -1,14 +1,14 @@
 nodes:
-  # - id: imu
-  #   operator:
-  #     python: op_3/imu.py
-  #     inputs:
-  #       tick: dora/timer/millis/100
-  #     outputs:
-  #       - Imu100D4
+  - id: imu
+    operator:
+      python: imu/imu.py
+      inputs:
+        tick: dora/timer/millis/100
+      outputs:
+        - Imu100D4
   - id: gnss
     operator:
-      python: gnss_D300_driver_dora.py
+      python: gnss/gnss_D300_driver_dora.py
       inputs:
         tick: dora/timer/millis/100
       outputs:
@@ -20,7 +20,7 @@ nodes:
       DEVICE_INDEX: 0
   - id: gnss_sub
     operator:
-      python: nmea_subscribeTopic.py
+      python: gnss/nmea_subscribeTopic.py
       inputs:
               DoraSentence: gnss/DoraSentence
               DoraNavSatFix: gnss/DoraNavSatFix
