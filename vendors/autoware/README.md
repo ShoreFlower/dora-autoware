@@ -6,6 +6,15 @@
 
 将IMU驱动与GNSS驱动放入一个数据流当中，目前IMU可以直接发到ros2进行显示，但GNSS可能是室内定位的原因，定位数据都是无效定位。
 
+# 文件代码说明
+
+1. imu/imu.py: 陀螺仪驱动代码；
+2. gnss/gnss.py: 定位驱动代码；
+3. gnss/Nmea_utils.py: 协议Nmea的格式代码，用于解析Nmea协议；
+4. gnss/DoraNmeaDriver_utils.py: Dora框架下的Nmea存储格式代码，用于存储定位数据；
+5. gnss/gnss_D300_driver_dora.py: 用于打印GNSS的定位数据；
+6. dataflowImuGnss.yml： 数据流脚本。
+
 ## 用法
 
 ```
